@@ -1,13 +1,19 @@
 {
-  "name": "docker_web_app",
+  "name": "node_web_app",
   "version": "1.0.0",
   "description": "Node.js on Docker",
-  "author": "First Last <first.last@example.com>",
+  "author": "Michael Riederer <michael.riederer@br.de>",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:dynamike67/node-web-app.git"
+  },
   "main": "server.js",
   "scripts": {
     "start": "node src/server.js"
   },
   "dependencies": {
-    "express": "^4.13.3"
+    "express": "^4.15.2",
+    "body-parser": "^1.17.1"
   }
 }

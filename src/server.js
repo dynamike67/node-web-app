@@ -1,15 +1,66 @@
-'use strict';
+// server.js
 
-const express = require('express');
+var express = require('express');
+var app = express();
+var fs = require("fs");
 
-// Constants
-const PORT = 8080;
+var bodyParser = require('body-parser');
 
-// App
-const app = express();
+// Create application/x-www-form-urlencoded parser
+var urlencodedParser = bodyParser.urlencoded({ extended: false })
+
+app.use(express.static('public'));
+app.get('/index.htm', function (req, res) {
+   res.sendFile( __dirname + "/" + "index.htm" );
+})
+
+app.post('/process_post', urlencodedParser, function (req, res) {
+   // Prepare output in JSON format
+   response = {
+      first_name:req.body.first_name,
+      last_name:req.body.last_name
+   };
+   console.log(response);
+   res.end(JSON.stringify(response));
+})
+
+// GET /
 app.get('/', function (req, res) {
-  res.send('Hello world\n');
-});
+   console.log("Got a GET request for the homepage");
+   res.send('Hello GET');
+})
 
-app.listen(PORT);
-console.log('Running on http://localhost:' + PORT);
+// POST /
+app.post('/', function (req, res) {
+   console.log("Got a POST request for the homepage");
+   res.send('Hello POST');
+})
+
+// GET /list_user
+app.get('/list_item', function (req, res) {
+   console.log("Got a GET request for /list_item");
+   fs.readFile( __dirname + "/" + "users.json", 'utf8', function (err, data) {
+       console.log( data );
+       res.end( data );
+   });
+})
+
+// PUT /insert_item
+app.put('/insert_item', function(req, res) {
+   console.log("Got a PUT request for /insert_item");
+   res.send('Page Pattern Match');
+})
+
+// DELETE /delete_item
+app.delete('/delete_item', function (req, res) {
+   console.log("Got a DELETE request for /delete_item");
+   res.send('Hello DELETE');
+})
+
+var server = app.listen(8080, function () {
+  
+   var host = server.address().address
+   var port = server.address().port
+
+   console.log("Example app listening at http://%s:%s", host, port)
+})
