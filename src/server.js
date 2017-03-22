@@ -10,8 +10,8 @@ var bodyParser = require('body-parser');
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
 
 app.use(express.static('public'));
-app.get('/index.htm', function (req, res) {
-   res.sendFile( __dirname + "/" + "index.htm" );
+app.get('/insert_item.html', function (req, res) {
+   res.sendFile( __dirname + "/" + "insert_item.html" );
 })
 
 app.post('/process_post', urlencodedParser, function (req, res) {
@@ -20,6 +20,21 @@ app.post('/process_post', urlencodedParser, function (req, res) {
       first_name:req.body.first_name,
       last_name:req.body.last_name
    };
+   console.log("Going to write into existing file");
+      fs.writeFile( __dirname + "/" + "input.json", JSON.stringify(response),  function(err) {
+         if (err) {
+            return console.error(err);
+         }
+   
+      console.log("Data written successfully!");
+      console.log("Let's read newly written data");
+      fs.readFile( __dirname + "/" + "input.json", function (err, data) {
+         if (err) {
+            return console.error(err);
+         }
+      console.log("Asynchronous read: " + data.toString());
+   });
+});
    console.log(response);
    res.end(JSON.stringify(response));
 })
@@ -27,7 +42,8 @@ app.post('/process_post', urlencodedParser, function (req, res) {
 // GET /
 app.get('/', function (req, res) {
    console.log("Got a GET request for the homepage");
-   res.send('Hello GET');
+   //res.send('Hello GET');
+   res.sendFile( __dirname + "/" + "index.html" );
 })
 
 // POST /
